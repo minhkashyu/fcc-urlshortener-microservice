@@ -1,51 +1,21 @@
-# URL Shortener Microservice API
+# URL Shortener Microservice
 
-URL Shortener Api repository.
-You can run it at https://mks-url-shortener-api.herokuapp.com/
+The solution link is [https://mks-fcc-urlshortener-microservice.glitch.me](https://mks-fcc-urlshortener-microservice.glitch.me).
 
-## Requirements
+## Example Usage
 
-* Expressjs:
+[https://mks-fcc-urlshortener-microservice.glitch.me/api/shorturl/1](https://mks-fcc-urlshortener-microservice.glitch.me/api/shorturl/1)
 
-  `npm install express --save`
+#### Will Redirect to
 
-* dotenv:
+[https://forum.freecodecamp.org/](https://forum.freecodecamp.org/)
 
-  `npm install dotenv --save`
+## Test Cases
 
-* mongodb:
+* You should provide your own project, not the example URL.
 
-  `npm install mongodb --save`
+* You can POST a URL to `/api/shorturl` and get a JSON response with `original_url` and `short_url` properties. Here's an example: `{ original_url : 'https://freeCodeCamp.org', short_url : 1}`
 
-* Validatorjs:
+* When you visit `/api/shorturl/<short_url>`, you will be redirected to the original URL.
 
-  `npm install validatorjs --save`
-
-## User Stories
-
-* I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.
-
-* If I pass an invalid URL that doesn't follow the valid http://www.example.com format, the JSON response will contain an error instead.
-
-* When I visit that shortened URL, it will redirect me to my original link.
-
-##Creation Usage
-
-https://mks-url-shortener-api.herokuapp.com/new/https://www.google.com
-
-https://mks-url-shortener-api.herokuapp.com/new/http://foo.com:80
-
-##Creation Output
-
-{
-  "original_url":"http://foo.com:80",
-  "short_url":"https://mks-url-shortener-api.herokuapp.com/1290"
-}
-
-##Usage
-
-https://mks-url-shortener-api.herokuapp.com/7766
-
-##Will redirect to
-
-https://www.google.com/
+* If you pass an invalid URL that doesn't follow the valid `http://www.example.com` format, the JSON response will contain `{ error: 'invalid url' }`

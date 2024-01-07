@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.text-multi-color {
+    background-image: linear-gradient(to left, violet, indigo, green, blue, orange, red);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+form {
+    border: solid 1px black;
+    border-radius: 5px;
+    margin: 10px auto;
+    padding: 20px;
+    max-width: 600px;
+}

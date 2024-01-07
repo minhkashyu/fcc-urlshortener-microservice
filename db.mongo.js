@@ -1,42 +1,65 @@
-'use strict';
+require('dotenv').config();
 
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-//var ObjectId = require('mongodb').ObjectID;
-var dbURL = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/url-shortener';
+let mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URI);
 
-module.exports = {
-    insertDocument: function (newObj) {
-        MongoClient.connect(dbURL, function (err, db) {
-            assert.equal(null, err);
-            var sites = db.collection('sites');
-            sites.insertOne(newObj, function (err, result) {
-                assert.equal(err, null);
-                console.log('Inserted a document into the sites collection. InsertedId: ' + result.insertedId + '.');
-                db.close();
-            });
-        });
-    },
+const siteSchema = new mongoose.Schema({
+  original_url: {
+    type: String,
+    required: true,
+  },
+  short_url: {
+    type: Number,
+    default: 0,
+  },
+});
 
-    findDocument: function (field, url, callback) {
-        MongoClient.connect(dbURL, function (err, db) {
-            assert.equal(null, err);
-            var sites = db.collection('sites');
-            var query = {};
-            query[field] = url;
-            sites.findOne(query, function (err, result) {
-                assert.equal(null, err);
-                db.close();
-                callback(result);
-            });
-        });
-    },
+siteSchema.index({short_url: 1}, {unique: true});
 
-    findDocumentOriginal: function (url, callback) {
-        this.findDocument('original_url', url, callback);
-    },
+let SiteModel = mongoose.model('Site', siteSchema);
 
-    findDocumentShort: function (url, callback) {
-        this.findDocument('short_url', url, callback);
-    }
+const createAndSaveSite = (originalUrl, done) => {
+  let siteDocument = new SiteModel({
+    original_url: originalUrl,
+  });
+
+  siteDocument.save().then((doc) => {
+    done(null, doc);
+  }).catch((err) => {
+    done(err);
+  });
 };
+
+const findSiteById = (siteId, done) => {
+  SiteModel.find(siteId).then((doc) => {
+    done(null, doc);
+  }).catch((err) => {
+    done(err);
+  });
+};
+
+const findSiteByOriginalUrl = (originalUrl, done) => {
+  SiteModel.findOne({
+    original_url: originalUrl,
+  }).then((doc) => {
+    done(null, doc);
+  }).catch((err) => {
+    done(err);
+  });
+};
+
+const findSiteByShortUrl = (shortUrl, done) => {
+  SiteModel.findOne({
+    short_url: shortUrl,
+  }).then((doc) => {
+    done(null, doc);
+  }).catch((err) => {
+    done(err);
+  });
+};
+
+exports.SiteModel = SiteModel;
+exports.createAndSaveSite = createAndSaveSite;
+exports.findSiteById = findSiteById;
+exports.findSiteByOriginalUrl = findSiteByOriginalUrl;
+exports.findSiteByShortUrl = findSiteByShortUrl;

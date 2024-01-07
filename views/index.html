@@ -1,45 +1,64 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en-AU">
 <head>
-    <title>URL Shortener Microservice</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <title>URL Shortener Microservice</title>
+  <link rel="icon"
+        type="image/png"
+        href="https://cdn.freecodecamp.org/universal/favicons/favicon-16x16.png"/>
 
+  <link href="/public/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="/public/css/style.css" rel="stylesheet" type="text/css">
+
+  <script href="/public/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 </head>
+
 <body>
-<div class="container">
-    <h1 class="header">FreeCodeCamp API Basejump: URL Shortener Microservice</h1>
-    <blockquote>
-        <p>User stories:</p>
-        <ul>
-            <li>I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.</li>
-            <li>If I pass an invalid URL that doesn't follow the valid http://www.example.com format, the JSON response will contain an error instead.</li>
-            <li>When I visit that shortened URL, it will redirect me to my original link</li>
-        </ul>
-    </blockquote>
+<h1 class="text-center fw-bold mt-4 mb-4">
+  <span class="text-multi-color">URL Shortener Microservice</span>
+</h1>
 
-    <h3>Example creation usage:</h3>
-    <code>https://mks-url-shortener-api.herokuapp.com/new/https://www.google.com</code><br>
-    <code>https://mks-url-shortener-api.herokuapp.com/new/http://foo.com:80</code>
+<hr/>
 
-    <h3>Example creation output</h3>
-    <code>
-        {
-            "original_url":"http://foo.com:80",
-            "short_url":"https://mks-url-shortener-api.herokuapp.com/1290"
-        }
-    </code>
+<div class="container text-center mt-5">
+  <h2 class="mb-3">Short URL Creation</h2>
 
-    <h3>Usage:</h3>
-    <code>https://mks-url-shortener-api.herokuapp.com/7766</code>
+  <p class="mb-5">
+    Example: <code>POST [project_url]/api/shorturl</code> -
+    <code>https://www.google.com</code>
+  </p>
 
-    <h3>Will redirect to:</h3>
-    <code>https://www.google.com/</code>
+  <form action="/api/shorturl" method="POST">
+    <fieldset>
+      <legend>URL Shortener</legend>
+      <div class="d-flex align-items-center mb-3">
+        <div class="flex-shrink-0">
+          <label for="url_input">URL</label>
+        </div>
+        <div class="flex-grow-1 ms-3">
+          <input id="url_input" type="text" name="url" class="form-control"
+                 placeholder="https://www.freecodecamp.org/"/>
+        </div>
+      </div>
+
+      <input type="submit" class="btn btn-primary" value="POST URL"/>
+    </fieldset>
+  </form>
+
+  <h2 class="mt-5 mb-3">Example Usage</h2>
+  <p class="mb-4">
+    <a href="/api/shorturl/1">
+      [this_project_url]/api/shorturl/1
+    </a>
+  </p>
+
+  <h5 class="mb-3">Will Redirect to:</h5>
+  <p class="mb-0">https://forum.freecodecamp.org/</p>
 </div>
-<script src="http://code.jquery.com/jquery.js"></script>
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<p class="text-center fw-bold mt-5 mb-0">
+  <span class="text-multi-color">Developed by </span>
+  Minh Ta
+</p>
 </body>
 </html>
