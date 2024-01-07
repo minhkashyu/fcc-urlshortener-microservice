@@ -18,10 +18,8 @@ siteSchema.index({short_url: 1}, {unique: true});
 
 let SiteModel = mongoose.model('Site', siteSchema);
 
-const createAndSaveSite = (originalUrl, done) => {
-  let siteDocument = new SiteModel({
-    original_url: originalUrl,
-  });
+const createAndSaveSite = (obj, done) => {
+  let siteDocument = new SiteModel(obj);
 
   siteDocument.save().then((doc) => {
     done(null, doc);
@@ -58,8 +56,17 @@ const findSiteByShortUrl = (shortUrl, done) => {
   });
 };
 
+const findLatestSite = (done) => {
+  SiteModel.findOne({}, null, { sort: { short_url: -1} }).then((doc) => {
+    done(null, doc);
+  }).catch((err) => {
+    done(err);
+  });
+};
+
 exports.SiteModel = SiteModel;
 exports.createAndSaveSite = createAndSaveSite;
 exports.findSiteById = findSiteById;
 exports.findSiteByOriginalUrl = findSiteByOriginalUrl;
 exports.findSiteByShortUrl = findSiteByShortUrl;
+exports.findLatestSite = findLatestSite;

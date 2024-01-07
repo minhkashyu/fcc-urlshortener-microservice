@@ -37,30 +37,52 @@ app.post('/api/shorturl', function(req, res) {
     originalUrl = 'https://' + originalUrl;
   }
 
-  // remove http:// or https://
-  let hostname = originalUrl.replace(/^https?:\/\//, '');
+  // get hostname only from originalUrl
+  const getLocation = (href) => {
+    var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+    return match && {
+      href: href,
+      protocol: match[1],
+      host: match[2],
+      hostname: match[3],
+      port: match[4],
+      pathname: match[5],
+      search: match[6],
+      hash: match[7]
+    };
+  };
+  let hostname = getLocation(originalUrl).hostname || '';
 
   lookup(hostname, function(err) {
     // If you pass an invalid URL that doesn't follow the valid `http://www.example.com` format, the JSON response will contain `{ error: 'invalid url' }`
     if (err) {
-      return res.json({error: err});
+      return res.json({'error': 'invalid url'});
     }
 
     // You can POST a URL to `/api/shorturl` and get a JSON response
     // with `original_url` and `short_url` properties. Here's an example:
     // `{ original_url : 'https://freeCodeCamp.org', short_url : 1}`
     mongoDb.findSiteByOriginalUrl(originalUrl, (err, doc) => {
-      if (err) {
-        return mongoDb.createAndSaveSite(originalUrl, (err, doc) => {
+      if (err || !doc) {
+        return mongoDb.findLatestSite((err, doc) => {
           if (err) {
-            return res.json({'error': 'invalid url'});
+            return res.json({'error': err});
           }
 
-          res.json({original_url: originalUrl, short_url: doc._id});
+          return mongoDb.createAndSaveSite({
+            original_url: originalUrl,
+            short_url: (doc?.short_url || 0) + 1,
+          }, (err, doc) => {
+            if (err) {
+              return res.json({'error': err});
+            }
+
+            return res.json({original_url: originalUrl, short_url: doc.short_url});
+          });
         });
       }
 
-      res.json({original_url: originalUrl, short_url: doc._id});
+      res.json({original_url: originalUrl, short_url: doc.short_url});
     });
   });
 });
