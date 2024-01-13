@@ -39,7 +39,7 @@ app.post('/api/shorturl', function(req, res) {
 
   // get hostname only from originalUrl
   const getLocation = (href) => {
-    var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+    let match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
     return match && {
       href: href,
       protocol: match[1],
@@ -89,7 +89,7 @@ app.post('/api/shorturl', function(req, res) {
 
 app.get('/api/shorturl/:id', function(req, res) {
   // When you visit `/api/shorturl/<short_url>`, you will be redirected to the original URL.
-  var shortUrl = req.params.id;
+  let shortUrl = req.params.id;
 
   if (!shortUrl || (shortUrl != parseInt(shortUrl))) {
     return res.json({'error': 'Wrong format'});

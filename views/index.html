@@ -28,7 +28,7 @@
     <code>https://www.google.com</code>
   </p>
 
-  <form action="/api/shorturl" method="POST">
+  <form action="/api/shorturl" id="url-shortener-form" method="POST">
     <fieldset>
       <legend>URL Shortener</legend>
       <div class="d-flex align-items-center mb-3">
@@ -41,7 +41,9 @@
         </div>
       </div>
 
-      <input type="submit" class="btn btn-primary" value="POST URL"/>
+      <div class="json-response alert alert-info text-break mb-2" style="display: none;"></div>
+
+      <input type="submit" class="btn btn-secondary w-100" value="POST URL"/>
     </fieldset>
   </form>
 
@@ -60,5 +62,41 @@
   <span class="text-multi-color">Developed by </span>
   Minh Ta
 </p>
+
+<script>
+  const ajaxPost = (frm, data) => {
+    // disable submit button
+    frm.querySelector('input[type="submit"]').disabled = true;
+
+    // ajax
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('POST', frm.action);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(data);
+
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        // enable submit button
+        frm.querySelector('input[type="submit"]').disabled = false;
+        frm.querySelector('.json-response').innerHTML = xhr.responseText;
+        frm.querySelector('.json-response').style.display = 'block';
+      }
+    };
+  };
+
+  /**
+   * URL Shortener Form
+   */
+  const urlShortenerForm = document.getElementById('url-shortener-form');
+
+  urlShortenerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    ajaxPost(urlShortenerForm, `url=${urlShortenerForm.querySelector('#url_input').value}`);
+
+    return false;
+  });
+</script>
 </body>
 </html>

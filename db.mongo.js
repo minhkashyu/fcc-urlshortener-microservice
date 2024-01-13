@@ -29,7 +29,7 @@ const createAndSaveSite = (obj, done) => {
 };
 
 const findSiteById = (siteId, done) => {
-  SiteModel.find(siteId).then((doc) => {
+  SiteModel.findById(siteId).then((doc) => {
     done(null, doc);
   }).catch((err) => {
     done(err);
